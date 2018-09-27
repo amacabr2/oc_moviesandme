@@ -31,6 +31,14 @@ export default class Search extends React.Component {
         }
     }
 
+    _searchFilms() {
+        this.page = 0
+        this.totalPages = 0
+        this.setState({films: []}, () => {
+            this._loadFilms()
+        })
+    }
+
     _searchTextInputChanged(text) {
         this.searchedText = text
     }
@@ -57,7 +65,7 @@ export default class Search extends React.Component {
                 <Button
                     style={styles.button}
                     title='Rechercher'
-                    onPress={() => this._loadFilms()}
+                    onPress={() => this._searchFilms()}
                 />
 
                 <FlatList
@@ -67,7 +75,7 @@ export default class Search extends React.Component {
                     onEndReachedThreshold={0.5}
                     onEndReached={() => {
                         if (this.state.films.length > 0 && this.page < this.totalPages) {
-                            this._loadFilms()
+                            this._searchFilms()
                         }
                     }}
                 />

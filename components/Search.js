@@ -60,7 +60,7 @@ export default class Search extends React.Component {
                     style={styles.textinput}
                     placeholder='Titre du film'
                     onChangeText={(text) => this._searchTextInputChanged(text)}
-                    onSubmitEditing={() => this._loadFilms()}
+                    onSubmitEditing={() => this._searchFilms()}
                 />
                 <Button
                     style={styles.button}
@@ -75,7 +75,7 @@ export default class Search extends React.Component {
                     onEndReachedThreshold={0.5}
                     onEndReached={() => {
                         if (this.state.films.length > 0 && this.page < this.totalPages) {
-                            this._searchFilms()
+                            this._loadFilms()
                         }
                     }}
                 />

@@ -1,6 +1,7 @@
 import  React from 'react'
 import {Button, TextInput, View, StyleSheet, ActivityIndicator} from "react-native";
 import { getFilmsFromApiWithSearchedText } from '../api/TMDBApi'
+import FilmList from "./FilmList";
 
 class Search extends React.Component {
 
@@ -51,6 +52,11 @@ class Search extends React.Component {
                 </View>
             )
         }
+    }
+
+    _displayDetailForFilm = (idFilm) => {
+        console.log("Display film with id " + idFilm)
+        this.props.navigation.navigate("FilmDetail", { idFilm: idFilm })
     }
 
     render() {

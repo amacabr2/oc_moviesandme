@@ -16,6 +16,17 @@ class FilmDetail extends React.Component {
     }
 
     componentDidMount() {
+        const favoriteFilmIndex = this.props.favoritesFilm.findIndex(item => item.id === this.props.navigation.state.params.idFilm)
+
+        if (favoriteFilmIndex !== -1) {
+            this.setState({
+                film: this.props.favoritesFilm[favoriteFilmIndex]
+            })
+            return
+        }
+
+        this.setState({ isLoading: true })
+
         getFilmDetailFromApi(this.props.navigation.state.params.idFilm).then(data => {
             this.setState({
                 film: data,
@@ -104,12 +115,6 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        dispatch: (action) => { dispatch(action) }
-    }
-}
-
 const styles = StyleSheet.create({
     main_container: {
         flex: 1
@@ -162,4 +167,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(FilmDetail)
+export default connect(mapStateToProps)(FilmDetail)

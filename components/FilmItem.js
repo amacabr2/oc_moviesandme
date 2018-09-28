@@ -3,7 +3,7 @@ import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native'
 import { getImageFromApi } from '../api/TMDBApi'
 import moment from 'moment'
 
-export default class FilmItem extends React.Component{
+class FilmItem extends React.Component{
 
     render() {
         const {film, displayDetailForFilm} = this.props
@@ -33,6 +33,8 @@ export default class FilmItem extends React.Component{
         )
     }
 }
+
+export default FilmItem
 
 const styles = StyleSheet.create({
     main_container: {

@@ -3,7 +3,7 @@ import {Button, TextInput, View, StyleSheet, FlatList, ActivityIndicator} from "
 import FilmItem from "./FilmItem";
 import { getFilmsFromApiWithSearchedText } from '../api/TMDBApi'
 
-export default class Search extends React.Component {
+class Search extends React.Component {
 
     constructor(props) {
         super(props)
@@ -89,6 +89,8 @@ export default class Search extends React.Component {
         )
     }
 }
+
+export default Search
 
 const styles = StyleSheet.create({
     main_container: {

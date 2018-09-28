@@ -4,6 +4,7 @@ import { getFilmDetailFromApi, getImageFromApi } from '../api/TMDBApi'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import numeral from 'numeral'
+import EnlargeShrink from "../animations/EnlargesShrink";
 
 class FilmDetail extends React.Component {
 
@@ -29,6 +30,7 @@ class FilmDetail extends React.Component {
             film: undefined,
             isLoading: true
         }
+        this._toggleFavorite = this._toggleFavorite.bind(this)
         this._shareFilm = this._shareFilm.bind(this)
     }
 
@@ -88,16 +90,20 @@ class FilmDetail extends React.Component {
 
     _displayFavoriteImage() {
         let sourceImage = require('../assets/images/ic_favorite_border.png')
+        let shouldEnLarge = false
 
         if (this.props.favoritesFilm.findIndex(item => item.id === this.state.film.id) !== -1) {
             sourceImage = require('../assets/images/ic_favorite.png')
+            shouldEnLarge = true
         }
 
         return (
-            <Image
-                style={styles.favorite_image}
-                source={sourceImage}
-            />
+            <EnlargeShrink shoulEnLarge={shouldEnLarge}>
+                <Image
+                    style={styles.favorite_image}
+                    source={sourceImage}
+                />
+            </EnlargeShrink>
         )
     }
 
@@ -114,7 +120,7 @@ class FilmDetail extends React.Component {
     _displayFilm() {
         const film = this.state.film
 
-        if (this.state.film !== undefined) {
+        if (film !== undefined) {
             return (
                 <ScrollView style={styles.scrollview_container}>
                     <Image
@@ -225,8 +231,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     favorite_image: {
-        width: 40,
-        height: 40
+        flex: 1,
+        width: null,
+        height: null
     },
     share_touchable_floatingactionbutton: {
         position: 'absolute',

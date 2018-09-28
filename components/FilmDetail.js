@@ -1,5 +1,5 @@
 import React from 'react'
-import {Image, ScrollView, StyleSheet, Text, View} from 'react-native'
+import {ActivityIndicator, Image, ScrollView, StyleSheet, Text, View} from 'react-native'
 import { getFilmDetailFromApi, getImageFromApi } from '../api/TMDBApi'
 import moment from 'moment'
 import numeral from 'numeral'

@@ -1,5 +1,5 @@
 import React from 'react'
-import {ActivityIndicator, Button, Image, ScrollView, StyleSheet, Text, View} from 'react-native'
+import {ActivityIndicator, Button, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native'
 import { getFilmDetailFromApi, getImageFromApi } from '../api/TMDBApi'
 import { connect } from 'react-redux'
 import moment from 'moment'
@@ -29,6 +29,21 @@ class FilmDetail extends React.Component {
         this.props.dispatch(action)
     }
 
+    _displayFavoriteImage() {
+        let sourceImage = require('../assets/images/ic_favorite_border.png')
+
+        if (this.props.favoritesFilm.findIndex(item => item.id === this.state.film.id) !== -1) {
+            sourceImage = require('../assets/images/ic_favorite.png')
+        }
+
+        return (
+            <Image
+                style={styles.favorite_image}
+                source={sourceImage}
+            />
+        )
+    }
+
     _displayLoading() {
         if(this.state.isLoading) {
             return (
@@ -50,8 +65,11 @@ class FilmDetail extends React.Component {
                         source={{uri: getImageFromApi(film.backdrop_path)}}
                     />
                     <Text style={styles.title_text}>{film.title}</Text>
-                    <Button title="Favoris" onPress={() => this._toggleFavorite()}/>
-                    <Text style={styles.description_text}>{film.overview}</Text>
+                    <TouchableOpacity
+                        style={styles.favorite_container}
+                        onPress={() => this._toggleFavorite()}>
+                        {this._displayFavoriteImage()}
+                    </TouchableOpacity>                    <Text style={styles.description_text}>{film.overview}</Text>
                     <Text style={styles.default_text}>Sorti le {moment(new Date(film.release_date)).format('DD/MM/YYYY')}</Text>
                     <Text style={styles.default_text}>Note : {film.vote_average} / 10</Text>
                     <Text style={styles.default_text}>Nombre de votes : {film.vote_count}</Text>
@@ -90,8 +108,6 @@ const mapDispatchToProps = (dispatch) => {
         dispatch: (action) => { dispatch(action) }
     }
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(FilmDetail)
 
 const styles = StyleSheet.create({
     main_container: {
@@ -135,5 +151,14 @@ const styles = StyleSheet.create({
         marginLeft: 5,
         marginRight: 5,
         marginTop: 5,
+    },
+    favorite_container: {
+        alignItems: 'center',
+    },
+    favorite_image: {
+        width: 40,
+        height: 40
     }
 })
+
+export default connect(mapStateToProps, mapDispatchToProps)(FilmDetail)

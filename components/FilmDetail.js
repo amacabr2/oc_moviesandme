@@ -1,5 +1,5 @@
 import React from 'react'
-import {ActivityIndicator, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native'
+import {ActivityIndicator, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View, Platform, Share} from 'react-native'
 import { getFilmDetailFromApi, getImageFromApi } from '../api/TMDBApi'
 import { connect } from 'react-redux'
 import moment from 'moment'
@@ -7,12 +7,29 @@ import numeral from 'numeral'
 
 class FilmDetail extends React.Component {
 
+    static navigationOptions = ({ navigation }) => {
+        const { params } = navigation.state
+
+        if (params.film != null && Platform.OS === 'ios') {
+            return {
+                headerRight: <TouchableOpacity
+                    style={styles.share_touchable_headerrightbutton}
+                    onPress={() => params.shareFilm()}>
+                    <Image
+                        style={styles.share_image}
+                        source={require('../assets/images/ic_share.png')} />
+                </TouchableOpacity>
+            }
+        }
+    }
+
     constructor(props) {
         super(props)
         this.state = {
             film: null,
             isLoading: true
         }
+        this._shareFilm = this._shareFilm().bind(this)
     }
 
     componentDidMount() {
@@ -22,7 +39,7 @@ class FilmDetail extends React.Component {
             this.setState({
                 film: this.props.favoritesFilm[favoriteFilmIndex],
                 isLoading: false
-            })
+            }, () => this._updateNavigationParams())
             return
         }
 
@@ -32,8 +49,35 @@ class FilmDetail extends React.Component {
             this.setState({
                 film: data,
                 isLoading: false
-            })
+            }, () => { this._updateNavigationParams() })
         })
+    }
+
+    _updateNavigationParams() {
+        this.props.navigation.setParams({
+            shareFilm: this._shareFilm,
+            film: this.state.film
+        })
+    }
+
+    _shareFilm() {
+        const { film } = this.state
+
+        Share.share({ title: film.title, message: film.overview }).then(
+                Alert.alert(
+                    'Succès',
+                    'Film partagé',
+                    [
+                        {text: 'OK', onPress: () => {}},
+                    ]
+                )).catch(err =>
+                    Alert.alert(
+                        'Echec',
+                        'Film non partagé',
+                        [
+                            {text: 'OK', onPress: () => {}},
+                        ]
+                ))
     }
 
     _toggleFavorite() {
@@ -100,11 +144,28 @@ class FilmDetail extends React.Component {
         }
     }
 
+    _displayFloatingActionButton() {
+        const { film } = this.state
+
+        if (film != null && Platform.OS === 'android') {
+            return (
+                <TouchableOpacity
+                    style={styles.share_touchable_floatingactionbutton}
+                    onPress={() => this._shareFilm()}>
+                    <Image
+                        style={styles.share_image}
+                        source={require('../assets/images/ic_share.png')} />
+                </TouchableOpacity>
+            )
+        }
+    }
+
     render() {
         return (
             <View style={styles.main_container}>
                 {this._displayLoading()}
                 {this._displayFilm()}
+                {this._displayFloatingActionButton()}
             </View>
         )
     }
@@ -165,6 +226,24 @@ const styles = StyleSheet.create({
     favorite_image: {
         width: 40,
         height: 40
+    },
+    share_touchable_floatingactionbutton: {
+        position: 'absolute',
+        width: 60,
+        height: 60,
+        right: 30,
+        bottom: 30,
+        borderRadius: 30,
+        backgroundColor: '#e91e63',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    share_image: {
+        width: 30,
+        height: 30
+    },
+    share_touchable_headerrightbutton: {
+        marginRight: 8
     }
 })
 

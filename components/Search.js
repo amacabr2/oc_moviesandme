@@ -53,6 +53,10 @@ export default class Search extends React.Component {
         }
     }
 
+    _displayDetailForFilm = (idFilm) => {
+        this.props.navigation.navigate("FilmDetail", {idFilm: idFilm})
+    }
+
     render() {
         return (
             <View style={styles.main_container}>
@@ -71,7 +75,7 @@ export default class Search extends React.Component {
                 <FlatList
                     data={this.state.films}
                     keyExtractor={(item) => item.id.toString()}
-                    renderItem={({item}) => <FilmItem film={item}/>}
+                    renderItem={({item}) => <FilmItem film={item} displayDetailForFilm={this._displayDetailForFilm}/>}
                     onEndReachedThreshold={0.5}
                     onEndReached={() => {
                         if (this.state.films.length > 0 && this.page < this.totalPages) {

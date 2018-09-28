@@ -1,5 +1,5 @@
 import React from 'react'
-import {ActivityIndicator, Button, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native'
+import {ActivityIndicator, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native'
 import { getFilmDetailFromApi, getImageFromApi } from '../api/TMDBApi'
 import { connect } from 'react-redux'
 import moment from 'moment'
@@ -69,7 +69,8 @@ class FilmDetail extends React.Component {
                         style={styles.favorite_container}
                         onPress={() => this._toggleFavorite()}>
                         {this._displayFavoriteImage()}
-                    </TouchableOpacity>                    <Text style={styles.description_text}>{film.overview}</Text>
+                    </TouchableOpacity>
+                    <Text style={styles.description_text}>{film.overview}</Text>
                     <Text style={styles.default_text}>Sorti le {moment(new Date(film.release_date)).format('DD/MM/YYYY')}</Text>
                     <Text style={styles.default_text}>Note : {film.vote_average} / 10</Text>
                     <Text style={styles.default_text}>Nombre de votes : {film.vote_count}</Text>

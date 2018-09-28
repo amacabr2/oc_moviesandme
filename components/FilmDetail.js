@@ -20,7 +20,8 @@ class FilmDetail extends React.Component {
 
         if (favoriteFilmIndex !== -1) {
             this.setState({
-                film: this.props.favoritesFilm[favoriteFilmIndex]
+                film: this.props.favoritesFilm[favoriteFilmIndex],
+                isLoading: false
             })
             return
         }

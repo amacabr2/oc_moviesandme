@@ -10,7 +10,7 @@ class FilmDetail extends React.Component {
     static navigationOptions = ({ navigation }) => {
         const { params } = navigation.state
 
-        if (params.film != null && Platform.OS === 'ios') {
+        if (params.film !== undefined && Platform.OS === 'ios') {
             return {
                 headerRight: <TouchableOpacity
                     style={styles.share_touchable_headerrightbutton}
@@ -26,10 +26,10 @@ class FilmDetail extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            film: null,
+            film: undefined,
             isLoading: true
         }
-        this._shareFilm = this._shareFilm().bind(this)
+        this._shareFilm = this._shareFilm.bind(this)
     }
 
     componentDidMount() {
@@ -62,6 +62,7 @@ class FilmDetail extends React.Component {
 
     _shareFilm() {
         const { film } = this.state
+        console.log(film)
 
         Share.share({ title: film.title, message: film.overview }).then(
                 Alert.alert(
@@ -113,7 +114,7 @@ class FilmDetail extends React.Component {
     _displayFilm() {
         const film = this.state.film
 
-        if (this.state.film != null) {
+        if (this.state.film !== undefined) {
             return (
                 <ScrollView style={styles.scrollview_container}>
                     <Image
@@ -147,7 +148,7 @@ class FilmDetail extends React.Component {
     _displayFloatingActionButton() {
         const { film } = this.state
 
-        if (film != null && Platform.OS === 'android') {
+        if (film !== undefined && Platform.OS === 'android') {
             return (
                 <TouchableOpacity
                     style={styles.share_touchable_floatingactionbutton}
